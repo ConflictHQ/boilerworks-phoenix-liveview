@@ -9,7 +9,15 @@ defmodule Boilerworks.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [plt_core_path: "priv/plts"]
     ]
   end
 
@@ -47,6 +55,8 @@ defmodule Boilerworks.MixProject do
       {:oban, "~> 2.18"},
       {:redix, "~> 1.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.18", only: :test},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_json_schema, "~> 0.10"},
       {:lazy_html, ">= 0.1.0", only: :test}
     ]

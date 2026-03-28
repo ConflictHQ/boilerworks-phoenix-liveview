@@ -99,6 +99,37 @@ jobs:
       - run: mix ecto.create
       - run: mix ecto.migrate
       - run: mix test
+      - name: Coverage
+        run: mix coveralls --min-coverage 80
+
+  dialyzer:
+    name: Dialyzer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            app/deps
+            app/_build
+          key: ${{ runner.os }}-mix-${{ hashFiles('app/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Cache PLTs
+        uses: actions/cache@v4
+        with:
+          path: app/priv/plts
+          key: ${{ runner.os }}-plts-${{ hashFiles('app/mix.lock') }}
+          restore-keys: ${{ runner.os }}-plts-
+      - run: mix deps.get
+      - run: mix dialyzer
 
   docker:
     name: Docker Build
