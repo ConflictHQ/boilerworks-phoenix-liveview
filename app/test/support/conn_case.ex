@@ -73,7 +73,7 @@ defmodule BoilerworksWeb.ConnCase do
       product.view product.create product.edit product.delete
       category.view category.create category.edit category.delete
       form.view form.create form.edit form.delete form.submit
-      workflow.view workflow.create workflow.edit workflow.delete
+      workflow.view workflow.create workflow.edit workflow.delete workflow.transition
       user.manage
     )
 
@@ -101,6 +101,47 @@ defmodule BoilerworksWeb.ConnCase do
     )
 
     user
+  end
+
+  def setup_user_with_permissions(user, permission_slugs) do
+    alias Boilerworks.Repo
+    alias Boilerworks.Accounts.{Group, Permission, UserGroup, GroupPermission}
+
+    {:ok, group} =
+      %Group{}
+      |> Group.changeset(%{name: "Limited #{System.unique_integer([:positive])}", slug: "limited-#{System.unique_integer([:positive])}"})
+      |> Repo.insert()
+
+    for slug <- permission_slugs do
+      perm =
+        case Repo.get_by(Permission, slug: slug) do
+          nil ->
+            {:ok, p} =
+              %Permission{}
+              |> Permission.changeset(%{name: slug, slug: slug})
+              |> Repo.insert()
+            p
+          p -> p
+        end
+
+      Repo.insert!(%GroupPermission{group_id: group.id, permission_id: perm.id},
+        on_conflict: :nothing,
+        conflict_target: [:group_id, :permission_id]
+      )
+    end
+
+    Repo.insert!(%UserGroup{user_id: user.id, group_id: group.id},
+      on_conflict: :nothing,
+      conflict_target: [:user_id, :group_id]
+    )
+
+    user
+  end
+
+  def register_and_log_in_viewer(%{conn: conn}) do
+    user = user_fixture()
+    setup_user_with_permissions(user, ~w(product.view category.view))
+    %{conn: log_in_user(conn, user), user: user}
   end
 
   def product_fixture(attrs \\ %{}) do

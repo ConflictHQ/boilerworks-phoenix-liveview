@@ -38,6 +38,7 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
 
   @impl true
   def handle_event("transition", %{"instance_id" => instance_id, "transition" => transition_name}, socket) do
+    require_permission!(socket, "workflow.transition")
     instance = Workflows.get_instance!(instance_id)
 
     case Workflows.transition(instance, transition_name, socket.assigns.current_user) do

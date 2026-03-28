@@ -43,6 +43,8 @@ defmodule BoilerworksWeb.ProductLive.FormComponent do
   end
 
   defp save_product(socket, :new, product_params) do
+    BoilerworksWeb.Plugs.LiveAuth.require_permission!(socket, "product.create")
+
     case Catalog.create_product(product_params, socket.assigns.current_user) do
       {:ok, product} ->
         {:noreply,

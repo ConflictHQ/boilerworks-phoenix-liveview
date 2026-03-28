@@ -41,6 +41,7 @@ defmodule BoilerworksWeb.ProductLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
+    require_permission!(socket, "product.delete")
     product = Catalog.get_product!(id)
     {:ok, _} = Catalog.delete_product(product, socket.assigns.current_user)
     {:noreply, assign(socket, products: Catalog.list_products(search: socket.assigns.search))}
