@@ -1,0 +1,17 @@
+# Dependencies and build
+app/deps/
+app/_build/
+app/node_modules/
+app/assets/node_modules/
+
+# Generated files
+app/priv/static/assets/
+erl_crash.dump
+
+# Env files
+*.env
+.env*
+!.env.example
+
+# Editor
+.elixir_ls/
