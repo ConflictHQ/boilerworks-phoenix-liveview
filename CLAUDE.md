@@ -24,9 +24,9 @@ cd docker
 docker compose up -d --build
 ```
 
-- **App**: http://localhost:4000
-- **Postgres**: localhost:5445
-- **Redis**: localhost:6388
+- **App**: http://localhost:8000
+- **Postgres**: localhost:5432
+- **Redis**: localhost:6379
 - **Admin login**: admin@boilerworks.dev / password1234
 
 ### Running tests

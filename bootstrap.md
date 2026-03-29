@@ -19,10 +19,10 @@ First boot takes ~60 seconds (dependency compilation, asset build, migrations, s
 
 ```bash
 # Health check
-curl http://localhost:4000/health
+curl http://localhost:8000/health
 
 # Open in browser
-open http://localhost:4000
+open http://localhost:8000
 ```
 
 Login with `admin@boilerworks.dev` / `password1234`.

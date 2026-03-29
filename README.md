@@ -26,9 +26,9 @@ docker compose up -d --build
 
 Wait ~60 seconds for first boot (dependency compilation, asset build, migrations, seeds).
 
-- **App**: http://localhost:4000
+- **App**: http://localhost:8000
 - **Admin login**: admin@boilerworks.dev / password1234
-- **Health check**: http://localhost:4000/health
+- **Health check**: http://localhost:8000/health
 
 ## Running Tests
 
