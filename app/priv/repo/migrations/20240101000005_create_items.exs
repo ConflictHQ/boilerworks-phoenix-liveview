@@ -1,8 +1,8 @@
-defmodule Boilerworks.Repo.Migrations.CreateProducts do
+defmodule Boilerworks.Repo.Migrations.CreateItems do
   use Ecto.Migration
 
   def change do
-    create table(:products, primary_key: false) do
+    create table(:items, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :name, :string, null: false
       add :slug, :string, null: false
@@ -18,8 +18,8 @@ defmodule Boilerworks.Repo.Migrations.CreateProducts do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:products, [:slug])
-    create unique_index(:products, [:sku])
-    create index(:products, [:category_id])
+    create unique_index(:items, [:slug])
+    create unique_index(:items, [:sku])
+    create index(:items, [:category_id])
   end
 end

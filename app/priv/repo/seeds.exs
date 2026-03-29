@@ -1,16 +1,16 @@
 alias Boilerworks.Repo
 alias Boilerworks.Accounts.{User, Group, Permission, UserGroup, GroupPermission}
-alias Boilerworks.Catalog.{Category, Product}
+alias Boilerworks.Catalog.{Category, Item}
 alias Boilerworks.Forms.FormDefinition
 alias Boilerworks.Workflows.WorkflowDefinition
 
 # Permissions
 permissions =
   [
-    {"View Products", "product.view"},
-    {"Create Products", "product.create"},
-    {"Edit Products", "product.edit"},
-    {"Delete Products", "product.delete"},
+    {"View Items", "item.view"},
+    {"Create Items", "item.create"},
+    {"Edit Items", "item.edit"},
+    {"Delete Items", "item.delete"},
     {"View Categories", "category.view"},
     {"Create Categories", "category.create"},
     {"Edit Categories", "category.edit"},
@@ -76,7 +76,7 @@ for perm <- all_permissions do
 end
 
 # Editor gets view + create + edit
-editor_slugs = ~w(product.view product.create product.edit category.view category.create category.edit form.view form.create form.edit form.submit workflow.view)
+editor_slugs = ~w(item.view item.create item.edit category.view category.create category.edit form.view form.create form.edit form.submit workflow.view)
 
 for perm <- Enum.filter(all_permissions, &(&1.slug in editor_slugs)) do
   Repo.insert!(
@@ -87,7 +87,7 @@ for perm <- Enum.filter(all_permissions, &(&1.slug in editor_slugs)) do
 end
 
 # Viewer gets view-only
-viewer_slugs = ~w(product.view category.view form.view workflow.view form.submit)
+viewer_slugs = ~w(item.view category.view form.view workflow.view form.submit)
 
 for perm <- Enum.filter(all_permissions, &(&1.slug in viewer_slugs)) do
   Repo.insert!(
@@ -147,7 +147,7 @@ categories =
     end
   end
 
-# Sample products
+# Sample items
 electronics = Enum.find(categories, &(&1.name == "Electronics"))
 
 for {name, price, sku} <- [
@@ -157,10 +157,10 @@ for {name, price, sku} <- [
     ] do
   slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9\s-]/, "") |> String.replace(~r/\s+/, "-")
 
-  case Repo.get_by(Product, slug: slug) do
+  case Repo.get_by(Item, slug: slug) do
     nil ->
-      %Product{}
-      |> Product.changeset(%{name: name, slug: slug, price: price, sku: sku, category_id: electronics.id})
+      %Item{}
+      |> Item.changeset(%{name: name, slug: slug, price: price, sku: sku, category_id: electronics.id})
       |> Ecto.Changeset.put_change(:created_by_id, admin_user.id)
       |> Ecto.Changeset.put_change(:updated_by_id, admin_user.id)
       |> Repo.insert!()

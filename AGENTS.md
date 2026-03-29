@@ -36,7 +36,7 @@ docker compose exec app sh -c "MIX_ENV=test mix test"
 Permissions are group-based. Check with `Authorization.has_permission?(user, "permission.slug")`.
 In LiveViews, use `require_permission!(socket, "permission.slug")` in `mount/3`.
 
-Permission slugs follow the pattern `resource.action` (e.g., `product.view`, `product.create`).
+Permission slugs follow the pattern `resource.action` (e.g., `item.view`, `item.create`).
 
 ## Forms engine
 

@@ -14,7 +14,7 @@ defmodule Boilerworks.Catalog.Category do
     belongs_to :created_by, Boilerworks.Accounts.User
     belongs_to :updated_by, Boilerworks.Accounts.User
 
-    has_many :products, Boilerworks.Catalog.Product
+    has_many :items, Boilerworks.Catalog.Item
 
     timestamps(type: :utc_datetime)
   end

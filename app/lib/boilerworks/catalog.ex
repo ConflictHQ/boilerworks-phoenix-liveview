@@ -1,19 +1,19 @@
 defmodule Boilerworks.Catalog do
   @moduledoc """
-  The Catalog context. Products and categories with soft deletes and audit trails.
+  The Catalog context. Items and categories with soft deletes and audit trails.
   """
 
   import Ecto.Query
   alias Boilerworks.Repo
-  alias Boilerworks.Catalog.{Product, Category}
+  alias Boilerworks.Catalog.{Item, Category}
 
-  ## Products
+  ## Items
 
-  def list_products(opts \\ []) do
+  def list_items(opts \\ []) do
     search = Keyword.get(opts, :search, "")
     category_id = Keyword.get(opts, :category_id)
 
-    Product
+    Item
     |> where([p], is_nil(p.deleted_at))
     |> maybe_filter_by_category(category_id)
     |> maybe_search(search)
@@ -22,48 +22,48 @@ defmodule Boilerworks.Catalog do
     |> Repo.all()
   end
 
-  def get_product!(id) do
-    Product
+  def get_item!(id) do
+    Item
     |> where([p], is_nil(p.deleted_at))
     |> preload(:category)
     |> Repo.get!(id)
   end
 
-  def get_product_by_slug(slug) do
-    Product
+  def get_item_by_slug(slug) do
+    Item
     |> where([p], is_nil(p.deleted_at) and p.slug == ^slug)
     |> preload(:category)
     |> Repo.one()
   end
 
-  def create_product(attrs, user) do
-    %Product{}
-    |> Product.changeset(attrs)
+  def create_item(attrs, user) do
+    %Item{}
+    |> Item.changeset(attrs)
     |> Ecto.Changeset.put_change(:created_by_id, user.id)
     |> Ecto.Changeset.put_change(:updated_by_id, user.id)
     |> Repo.insert()
-    |> tap_ok(&broadcast_product_change({:product_created, &1}))
+    |> tap_ok(&broadcast_item_change({:item_created, &1}))
   end
 
-  def update_product(%Product{} = product, attrs, user) do
-    product
-    |> Product.changeset(attrs)
+  def update_item(%Item{} = item, attrs, user) do
+    item
+    |> Item.changeset(attrs)
     |> Ecto.Changeset.put_change(:updated_by_id, user.id)
     |> Repo.update()
-    |> tap_ok(&broadcast_product_change({:product_updated, &1}))
+    |> tap_ok(&broadcast_item_change({:item_updated, &1}))
   end
 
-  def delete_product(%Product{} = product, user) do
+  def delete_item(%Item{} = item, user) do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
 
-    product
+    item
     |> Ecto.Changeset.change(%{deleted_at: now, deleted_by_id: user.id})
     |> Repo.update()
-    |> tap_ok(&broadcast_product_change({:product_deleted, &1}))
+    |> tap_ok(&broadcast_item_change({:item_deleted, &1}))
   end
 
-  def change_product(%Product{} = product, attrs \\ %{}) do
-    Product.changeset(product, attrs)
+  def change_item(%Item{} = item, attrs \\ %{}) do
+    Item.changeset(item, attrs)
   end
 
   ## Categories
@@ -127,8 +127,8 @@ defmodule Boilerworks.Catalog do
     where(query, [q], ilike(q.name, ^search_term))
   end
 
-  defp broadcast_product_change(message) do
-    Phoenix.PubSub.broadcast(Boilerworks.PubSub, "products", message)
+  defp broadcast_item_change(message) do
+    Phoenix.PubSub.broadcast(Boilerworks.PubSub, "items", message)
   end
 
   defp tap_ok({:ok, record}, fun) do

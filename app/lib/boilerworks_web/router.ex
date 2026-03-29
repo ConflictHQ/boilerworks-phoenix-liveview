@@ -47,11 +47,11 @@ defmodule BoilerworksWeb.Router do
       on_mount: [{BoilerworksWeb.Plugs.LiveAuth, :ensure_authenticated}] do
       live "/", DashboardLive, :index
 
-      # Products
-      live "/products", ProductLive.Index, :index
-      live "/products/new", ProductLive.Index, :new
-      live "/products/:id/edit", ProductLive.Index, :edit
-      live "/products/:id", ProductLive.Show, :show
+      # Items
+      live "/items", ItemLive.Index, :index
+      live "/items/new", ItemLive.Index, :new
+      live "/items/:id/edit", ItemLive.Index, :edit
+      live "/items/:id", ItemLive.Show, :show
 
       # Categories
       live "/categories", CategoryLive.Index, :index

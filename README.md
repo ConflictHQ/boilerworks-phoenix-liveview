@@ -9,7 +9,7 @@ Phoenix with LiveView for applications that demand real-time updates, collaborat
 - **Phoenix 1.7 + LiveView** -- Server-rendered real-time UI over WebSocket
 - **Session-based auth** -- Bcrypt password hashing, session tokens, httpOnly cookies
 - **Group-based RBAC** -- Permissions assigned to groups, never directly to users
-- **Products + Categories CRUD** -- Full LiveView CRUD with real-time PubSub updates
+- **Items + Categories CRUD** -- Full LiveView CRUD with real-time PubSub updates
 - **Forms engine** -- JSON schema definitions, dynamic LiveView rendering, validation
 - **Workflow engine** -- State machine with transitions, logging, real-time updates
 - **Boilerworks dark admin theme** -- Tailwind CSS dark mode throughout
@@ -66,7 +66,7 @@ app/
     boilerworks/     -- Business logic contexts
       accounts/      -- Users, groups, permissions, tokens
       authorization/ -- RBAC permission checks
-      catalog/       -- Products and categories
+      catalog/       -- Items and categories
       forms/         -- Form definitions and submissions
       workflows/     -- Workflow definitions, instances, transitions
     boilerworks_web/ -- Web layer
@@ -94,7 +94,7 @@ docker/
 | Group | Permissions |
 |-------|-------------|
 | Administrators | All permissions |
-| Editors | View + create + edit (products, categories, forms, workflows) |
+| Editors | View + create + edit (items, categories, forms, workflows) |
 | Viewers | View-only access |
 
 ---

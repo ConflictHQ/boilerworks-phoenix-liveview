@@ -70,7 +70,7 @@ defmodule BoilerworksWeb.ConnCase do
       |> Repo.insert()
 
     permission_slugs = ~w(
-      product.view product.create product.edit product.delete
+      item.view item.create item.edit item.delete
       category.view category.create category.edit category.delete
       form.view form.create form.edit form.delete form.submit
       workflow.view workflow.create workflow.edit workflow.delete workflow.transition
@@ -140,24 +140,24 @@ defmodule BoilerworksWeb.ConnCase do
 
   def register_and_log_in_viewer(%{conn: conn}) do
     user = user_fixture()
-    setup_user_with_permissions(user, ~w(product.view category.view))
+    setup_user_with_permissions(user, ~w(item.view category.view))
     %{conn: log_in_user(conn, user), user: user}
   end
 
-  def product_fixture(attrs \\ %{}) do
+  def item_fixture(attrs \\ %{}) do
     user = user_fixture()
     setup_user_permissions(user)
 
-    {:ok, product} =
-      Boilerworks.Catalog.create_product(
+    {:ok, item} =
+      Boilerworks.Catalog.create_item(
         Map.merge(
-          %{"name" => "Test Product", "price" => "19.99"},
+          %{"name" => "Test Item", "price" => "19.99"},
           attrs
         ),
         user
       )
 
-    product
+    item
   end
 
   def category_fixture(attrs \\ %{}) do

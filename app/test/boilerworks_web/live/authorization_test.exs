@@ -5,8 +5,8 @@ defmodule BoilerworksWeb.AuthorizationTest do
   import ExUnit.CaptureLog
 
   describe "unauthenticated access" do
-    test "redirects to login from /products", %{conn: conn} do
-      assert {:error, {:redirect, %{to: "/login"}}} = live(conn, ~p"/products")
+    test "redirects to login from /items", %{conn: conn} do
+      assert {:error, {:redirect, %{to: "/login"}}} = live(conn, ~p"/items")
     end
 
     test "redirects to login from / (dashboard)", %{conn: conn} do
@@ -17,33 +17,33 @@ defmodule BoilerworksWeb.AuthorizationTest do
   describe "viewer permission boundaries" do
     setup :register_and_log_in_viewer
 
-    test "viewer can access /products (has product.view)", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/products")
-      assert html =~ "Products"
+    test "viewer can access /items (has item.view)", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/items")
+      assert html =~ "Items"
     end
 
-    test "viewer cannot save a new product via the create form", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/products/new")
+    test "viewer cannot save a new item via the create form", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/items/new")
 
       Process.flag(:trap_exit, true)
 
       assert capture_log(fn ->
                catch_exit(
                  view
-                 |> form("#product-form", product: %{name: "Denied Product", price: "9.99"})
+                 |> form("#item-form", item: %{name: "Denied Item", price: "9.99"})
                  |> render_submit()
                )
              end) =~ "ForbiddenError"
     end
 
-    test "viewer cannot delete a product", %{conn: conn} do
-      product = product_fixture(%{"name" => "Delete Target"})
-      {:ok, view, _html} = live(conn, ~p"/products")
+    test "viewer cannot delete a item", %{conn: conn} do
+      item = item_fixture(%{"name" => "Delete Target"})
+      {:ok, view, _html} = live(conn, ~p"/items")
 
       Process.flag(:trap_exit, true)
 
       assert capture_log(fn ->
-               catch_exit(render_click(view, "delete", %{"id" => product.id}))
+               catch_exit(render_click(view, "delete", %{"id" => item.id}))
              end) =~ "ForbiddenError"
     end
 

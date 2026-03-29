@@ -5,7 +5,7 @@ defmodule BoilerworksWeb.DashboardLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    products = Catalog.list_products()
+    items = Catalog.list_items()
     categories = Catalog.list_categories()
     form_definitions = Forms.list_form_definitions()
     workflow_definitions = Workflows.list_workflow_definitions()
@@ -13,7 +13,7 @@ defmodule BoilerworksWeb.DashboardLive do
     {:ok,
      assign(socket,
        page_title: "Dashboard",
-       product_count: length(products),
+       item_count: length(items),
        category_count: length(categories),
        form_count: length(form_definitions),
        workflow_count: length(workflow_definitions)
@@ -27,7 +27,7 @@ defmodule BoilerworksWeb.DashboardLive do
       <h2 class="text-2xl font-bold text-zinc-100 mb-8">Dashboard</h2>
 
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <.stat_card title="Products" count={@product_count} href={~p"/products"} color="emerald" />
+        <.stat_card title="Items" count={@item_count} href={~p"/items"} color="emerald" />
         <.stat_card title="Categories" count={@category_count} href={~p"/categories"} color="blue" />
         <.stat_card title="Forms" count={@form_count} href={~p"/forms"} color="purple" />
         <.stat_card title="Workflows" count={@workflow_count} href={~p"/workflows"} color="amber" />
@@ -36,8 +36,8 @@ defmodule BoilerworksWeb.DashboardLive do
       <div class="mt-12">
         <h3 class="text-lg font-semibold text-zinc-200 mb-4">Quick Actions</h3>
         <div class="flex gap-4">
-          <.link navigate={~p"/products/new"} class="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-sm font-semibold text-white">
-            New Product
+          <.link navigate={~p"/items/new"} class="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-sm font-semibold text-white">
+            New Item
           </.link>
           <.link navigate={~p"/categories/new"} class="rounded-lg bg-zinc-700 hover:bg-zinc-600 px-4 py-2 text-sm font-semibold text-zinc-200">
             New Category

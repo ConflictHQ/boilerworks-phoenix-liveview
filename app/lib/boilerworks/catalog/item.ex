@@ -1,11 +1,11 @@
-defmodule Boilerworks.Catalog.Product do
+defmodule Boilerworks.Catalog.Item do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
-  schema "products" do
+  schema "items" do
     field :name, :string
     field :slug, :string
     field :description, :string
@@ -21,8 +21,8 @@ defmodule Boilerworks.Catalog.Product do
     timestamps(type: :utc_datetime)
   end
 
-  def changeset(product, attrs) do
-    product
+  def changeset(item, attrs) do
+    item
     |> cast(attrs, [:name, :slug, :description, :price, :sku, :category_id])
     |> validate_required([:name, :price])
     |> validate_number(:price, greater_than: 0)

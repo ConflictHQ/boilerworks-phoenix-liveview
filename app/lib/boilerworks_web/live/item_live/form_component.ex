@@ -1,12 +1,12 @@
-defmodule BoilerworksWeb.ProductLive.FormComponent do
+defmodule BoilerworksWeb.ItemLive.FormComponent do
   use BoilerworksWeb, :live_component
 
   alias Boilerworks.Catalog
 
   @impl true
-  def update(%{product: product} = assigns, socket) do
+  def update(%{item: item} = assigns, socket) do
     categories = Catalog.list_categories()
-    changeset = Catalog.change_product(product)
+    changeset = Catalog.change_item(item)
 
     {:ok,
      socket
@@ -16,25 +16,25 @@ defmodule BoilerworksWeb.ProductLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"product" => product_params}, socket) do
+  def handle_event("validate", %{"item" => item_params}, socket) do
     changeset =
-      socket.assigns.product
-      |> Catalog.change_product(product_params)
+      socket.assigns.item
+      |> Catalog.change_item(item_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"product" => product_params}, socket) do
-    save_product(socket, socket.assigns.action, product_params)
+  def handle_event("save", %{"item" => item_params}, socket) do
+    save_item(socket, socket.assigns.action, item_params)
   end
 
-  defp save_product(socket, :edit, product_params) do
-    case Catalog.update_product(socket.assigns.product, product_params, socket.assigns.current_user) do
-      {:ok, product} ->
+  defp save_item(socket, :edit, item_params) do
+    case Catalog.update_item(socket.assigns.item, item_params, socket.assigns.current_user) do
+      {:ok, item} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Product \"#{product.name}\" updated")
+         |> put_flash(:info, "Item \"#{item.name}\" updated")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -42,14 +42,14 @@ defmodule BoilerworksWeb.ProductLive.FormComponent do
     end
   end
 
-  defp save_product(socket, :new, product_params) do
-    BoilerworksWeb.Plugs.LiveAuth.require_permission!(socket, "product.create")
+  defp save_item(socket, :new, item_params) do
+    BoilerworksWeb.Plugs.LiveAuth.require_permission!(socket, "item.create")
 
-    case Catalog.create_product(product_params, socket.assigns.current_user) do
-      {:ok, product} ->
+    case Catalog.create_item(item_params, socket.assigns.current_user) do
+      {:ok, item} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Product \"#{product.name}\" created")
+         |> put_flash(:info, "Item \"#{item.name}\" created")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -69,7 +69,7 @@ defmodule BoilerworksWeb.ProductLive.FormComponent do
 
       <.simple_form
         for={@form}
-        id="product-form"
+        id="item-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
@@ -87,7 +87,7 @@ defmodule BoilerworksWeb.ProductLive.FormComponent do
         />
 
         <:actions>
-          <.button phx-disable-with="Saving...">Save Product</.button>
+          <.button phx-disable-with="Saving...">Save Item</.button>
         </:actions>
       </.simple_form>
     </div>

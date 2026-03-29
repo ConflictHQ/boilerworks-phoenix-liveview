@@ -14,66 +14,66 @@ defmodule Boilerworks.CatalogTest do
     user
   end
 
-  describe "products" do
-    test "list_products/0 returns non-deleted products" do
+  describe "items" do
+    test "list_items/0 returns non-deleted items" do
       user = user_fixture()
-      {:ok, product} = Catalog.create_product(%{"name" => "Widget", "price" => "9.99"}, user)
-      products = Catalog.list_products()
-      assert Enum.any?(products, fn p -> p.id == product.id end)
+      {:ok, item} = Catalog.create_item(%{"name" => "Widget", "price" => "9.99"}, user)
+      items = Catalog.list_items()
+      assert Enum.any?(items, fn p -> p.id == item.id end)
     end
 
-    test "list_products/1 filters by search" do
+    test "list_items/1 filters by search" do
       user = user_fixture()
-      {:ok, _p1} = Catalog.create_product(%{"name" => "Alpha Widget", "price" => "9.99"}, user)
-      {:ok, _p2} = Catalog.create_product(%{"name" => "Beta Gadget", "price" => "19.99"}, user)
+      {:ok, _p1} = Catalog.create_item(%{"name" => "Alpha Widget", "price" => "9.99"}, user)
+      {:ok, _p2} = Catalog.create_item(%{"name" => "Beta Gadget", "price" => "19.99"}, user)
 
-      results = Catalog.list_products(search: "Alpha")
+      results = Catalog.list_items(search: "Alpha")
       assert length(results) == 1
       assert hd(results).name == "Alpha Widget"
     end
 
-    test "create_product/2 sets audit fields" do
+    test "create_item/2 sets audit fields" do
       user = user_fixture()
-      {:ok, product} = Catalog.create_product(%{"name" => "Audited", "price" => "5.00"}, user)
-      assert product.created_by_id == user.id
-      assert product.updated_by_id == user.id
+      {:ok, item} = Catalog.create_item(%{"name" => "Audited", "price" => "5.00"}, user)
+      assert item.created_by_id == user.id
+      assert item.updated_by_id == user.id
     end
 
-    test "create_product/2 generates slug" do
+    test "create_item/2 generates slug" do
       user = user_fixture()
-      {:ok, product} = Catalog.create_product(%{"name" => "My New Product", "price" => "5.00"}, user)
-      assert product.slug == "my-new-product"
+      {:ok, item} = Catalog.create_item(%{"name" => "My New Item", "price" => "5.00"}, user)
+      assert item.slug == "my-new-item"
     end
 
-    test "create_product/2 rejects missing price" do
+    test "create_item/2 rejects missing price" do
       user = user_fixture()
-      assert {:error, changeset} = Catalog.create_product(%{"name" => "No Price"}, user)
+      assert {:error, changeset} = Catalog.create_item(%{"name" => "No Price"}, user)
       assert errors_on(changeset).price != []
     end
 
-    test "create_product/2 rejects zero price" do
+    test "create_item/2 rejects zero price" do
       user = user_fixture()
-      assert {:error, changeset} = Catalog.create_product(%{"name" => "Free", "price" => "0"}, user)
+      assert {:error, changeset} = Catalog.create_item(%{"name" => "Free", "price" => "0"}, user)
       assert errors_on(changeset).price != []
     end
 
-    test "update_product/3 updates the product" do
+    test "update_item/3 updates the item" do
       user = user_fixture()
-      {:ok, product} = Catalog.create_product(%{"name" => "Original", "price" => "10.00"}, user)
-      {:ok, updated} = Catalog.update_product(product, %{"name" => "Updated"}, user)
+      {:ok, item} = Catalog.create_item(%{"name" => "Original", "price" => "10.00"}, user)
+      {:ok, updated} = Catalog.update_item(item, %{"name" => "Updated"}, user)
       assert updated.name == "Updated"
     end
 
-    test "delete_product/2 soft deletes" do
+    test "delete_item/2 soft deletes" do
       user = user_fixture()
-      {:ok, product} = Catalog.create_product(%{"name" => "To Delete", "price" => "10.00"}, user)
-      {:ok, deleted} = Catalog.delete_product(product, user)
+      {:ok, item} = Catalog.create_item(%{"name" => "To Delete", "price" => "10.00"}, user)
+      {:ok, deleted} = Catalog.delete_item(item, user)
       assert deleted.deleted_at != nil
       assert deleted.deleted_by_id == user.id
 
       # Should not appear in list
-      products = Catalog.list_products()
-      refute Enum.any?(products, fn p -> p.id == product.id end)
+      items = Catalog.list_items()
+      refute Enum.any?(items, fn p -> p.id == item.id end)
     end
   end
 
