@@ -96,3 +96,7 @@ docker/
 | Administrators | All permissions |
 | Editors | View + create + edit (products, categories, forms, workflows) |
 | Viewers | View-only access |
+
+---
+
+Boilerworks is a [Conflict](https://weareconflict.com) brand. CONFLICT is a registered trademark of Conflict LLC.
