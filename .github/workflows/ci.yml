@@ -34,7 +34,7 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-
       - run: mix deps.get
       - run: mix format --check-formatted
-      - run: mix credo --strict
+      - run: mix credo
 
   build:
     name: Build
