@@ -6,7 +6,9 @@ defmodule BoilerworksWeb.AuthLive.Register do
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
-    {:ok, assign(socket, form: to_form(changeset, as: "user"), page_title: "Register"), layout: {BoilerworksWeb.Layouts, :root}}
+
+    {:ok, assign(socket, form: to_form(changeset, as: "user"), page_title: "Register"),
+     layout: {BoilerworksWeb.Layouts, :root}}
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do

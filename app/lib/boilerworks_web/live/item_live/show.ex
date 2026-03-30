@@ -16,7 +16,7 @@ defmodule BoilerworksWeb.ItemLive.Show do
   def render(assigns) do
     ~H"""
     <.header>
-      <%= @item.name %>
+      {@item.name}
       <:actions>
         <.link patch={~p"/items/#{@item}/edit"} phx-click={JS.push_focus()}>
           <.button>Edit</.button>
@@ -28,25 +28,27 @@ defmodule BoilerworksWeb.ItemLive.Show do
       <div class="grid grid-cols-2 gap-6">
         <div>
           <dt class="text-sm font-medium text-zinc-400">SKU</dt>
-          <dd class="mt-1 text-sm text-zinc-200"><%= @item.sku || "-" %></dd>
+          <dd class="mt-1 text-sm text-zinc-200">{@item.sku || "-"}</dd>
         </div>
         <div>
           <dt class="text-sm font-medium text-zinc-400">Price</dt>
-          <dd class="mt-1 text-sm text-zinc-200">$<%= @item.price %></dd>
+          <dd class="mt-1 text-sm text-zinc-200">${@item.price}</dd>
         </div>
         <div>
           <dt class="text-sm font-medium text-zinc-400">Category</dt>
-          <dd class="mt-1 text-sm text-zinc-200"><%= if @item.category, do: @item.category.name, else: "-" %></dd>
+          <dd class="mt-1 text-sm text-zinc-200">
+            {if @item.category, do: @item.category.name, else: "-"}
+          </dd>
         </div>
         <div>
           <dt class="text-sm font-medium text-zinc-400">Slug</dt>
-          <dd class="mt-1 text-sm text-zinc-200"><%= @item.slug %></dd>
+          <dd class="mt-1 text-sm text-zinc-200">{@item.slug}</dd>
         </div>
       </div>
 
       <div :if={@item.description}>
         <dt class="text-sm font-medium text-zinc-400">Description</dt>
-        <dd class="mt-1 text-sm text-zinc-200"><%= @item.description %></dd>
+        <dd class="mt-1 text-sm text-zinc-200">{@item.description}</dd>
       </div>
     </div>
 

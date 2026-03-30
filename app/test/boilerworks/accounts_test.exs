@@ -42,7 +42,9 @@ defmodule Boilerworks.AccountsTest do
 
   describe "session tokens" do
     test "generates and verifies session token" do
-      {:ok, user} = Accounts.register_user(%{email: "session@example.com", password: "password1234"})
+      {:ok, user} =
+        Accounts.register_user(%{email: "session@example.com", password: "password1234"})
+
       token = Accounts.generate_user_session_token(user)
       assert is_binary(token)
 
@@ -51,7 +53,9 @@ defmodule Boilerworks.AccountsTest do
     end
 
     test "deletes session token" do
-      {:ok, user} = Accounts.register_user(%{email: "delete@example.com", password: "password1234"})
+      {:ok, user} =
+        Accounts.register_user(%{email: "delete@example.com", password: "password1234"})
+
       token = Accounts.generate_user_session_token(user)
       Accounts.delete_user_session_token(token)
       refute Accounts.get_user_by_session_token(token)

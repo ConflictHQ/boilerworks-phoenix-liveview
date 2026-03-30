@@ -65,7 +65,7 @@ defmodule BoilerworksWeb.ItemLive.FormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <h2 class="text-lg font-semibold leading-8 text-zinc-100"><%= @title %></h2>
+      <h2 class="text-lg font-semibold leading-8 text-zinc-100">{@title}</h2>
 
       <.simple_form
         for={@form}

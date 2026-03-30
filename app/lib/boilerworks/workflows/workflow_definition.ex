@@ -36,12 +36,22 @@ defmodule Boilerworks.Workflows.WorkflowDefinition do
     case get_change(changeset, :slug) do
       nil ->
         case get_change(changeset, :name) do
-          nil -> changeset
+          nil ->
+            changeset
+
           name ->
-            slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9\s-]/, "") |> String.replace(~r/\s+/, "-") |> String.trim("-")
+            slug =
+              name
+              |> String.downcase()
+              |> String.replace(~r/[^a-z0-9\s-]/, "")
+              |> String.replace(~r/\s+/, "-")
+              |> String.trim("-")
+
             put_change(changeset, :slug, slug)
         end
-      _ -> changeset
+
+      _ ->
+        changeset
     end
   end
 
@@ -50,11 +60,20 @@ defmodule Boilerworks.Workflows.WorkflowDefinition do
     initial = get_change(changeset, :initial_state) || get_field(changeset, :initial_state)
 
     cond do
-      is_nil(states) -> changeset
-      is_nil(initial) -> changeset
-      not is_map(states) -> add_error(changeset, :states, "must be a map of state names to config")
-      not Map.has_key?(states, initial) -> add_error(changeset, :initial_state, "must be a valid state")
-      true -> changeset
+      is_nil(states) ->
+        changeset
+
+      is_nil(initial) ->
+        changeset
+
+      not is_map(states) ->
+        add_error(changeset, :states, "must be a map of state names to config")
+
+      not Map.has_key?(states, initial) ->
+        add_error(changeset, :initial_state, "must be a valid state")
+
+      true ->
+        changeset
     end
   end
 end

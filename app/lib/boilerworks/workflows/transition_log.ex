@@ -19,7 +19,14 @@ defmodule Boilerworks.Workflows.TransitionLog do
 
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:from_state, :to_state, :transition_name, :metadata, :workflow_instance_id, :performed_by_id])
+    |> cast(attrs, [
+      :from_state,
+      :to_state,
+      :transition_name,
+      :metadata,
+      :workflow_instance_id,
+      :performed_by_id
+    ])
     |> validate_required([:from_state, :to_state, :transition_name, :workflow_instance_id])
   end
 end

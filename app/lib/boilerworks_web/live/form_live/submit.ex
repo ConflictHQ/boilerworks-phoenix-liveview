@@ -59,23 +59,26 @@ defmodule BoilerworksWeb.FormLive.Submit do
   def render(assigns) do
     ~H"""
     <.header>
-      Submit: <%= @form_definition.name %>
+      Submit: {@form_definition.name}
     </.header>
 
     <div class="mt-8">
       <form phx-change="validate" phx-submit="submit" class="space-y-6">
         <div :for={field <- @fields}>
           <label class="block text-sm font-semibold leading-6 text-zinc-300">
-            <%= field["label"] || field["name"] %>
+            {field["label"] || field["name"]}
             <span :if={field["required"]} class="text-rose-400">*</span>
           </label>
 
-          <%= render_field(field, @form_data, @errors) %>
+          {render_field(field, @form_data, @errors)}
         </div>
 
         <div class="flex gap-4">
           <.button type="submit" phx-disable-with="Submitting...">Submit</.button>
-          <.link navigate={~p"/forms/#{@form_definition}"} class="rounded-lg bg-zinc-700 hover:bg-zinc-600 py-2 px-3 text-sm font-semibold text-zinc-200">
+          <.link
+            navigate={~p"/forms/#{@form_definition}"}
+            class="rounded-lg bg-zinc-700 hover:bg-zinc-600 py-2 px-3 text-sm font-semibold text-zinc-200"
+          >
             Cancel
           </.link>
         </div>
@@ -100,7 +103,7 @@ defmodule BoilerworksWeb.FormLive.Submit do
       ]}
       rows="4"
     ><%= @value %></textarea>
-    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400"><%= msg %></p>
+    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400">{msg}</p>
     """
   end
 
@@ -117,9 +120,9 @@ defmodule BoilerworksWeb.FormLive.Submit do
       class="mt-2 block w-full rounded-lg border-zinc-600 bg-zinc-700 text-zinc-200 focus:ring-0 sm:text-sm"
     >
       <option value="">Select...</option>
-      <option :for={opt <- @options} value={opt} selected={opt == @value}><%= opt %></option>
+      <option :for={opt <- @options} value={opt} selected={opt == @value}>{opt}</option>
     </select>
-    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400"><%= msg %></p>
+    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400">{msg}</p>
     """
   end
 
@@ -141,7 +144,7 @@ defmodule BoilerworksWeb.FormLive.Submit do
         class="rounded border-zinc-600 bg-zinc-700 text-emerald-500 focus:ring-0"
       />
     </div>
-    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400"><%= msg %></p>
+    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400">{msg}</p>
     """
   end
 
@@ -170,7 +173,7 @@ defmodule BoilerworksWeb.FormLive.Submit do
         @errors != [] && "border-rose-400"
       ]}
     />
-    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400"><%= msg %></p>
+    <p :for={msg <- @errors} class="mt-1 text-sm text-rose-400">{msg}</p>
     """
   end
 end

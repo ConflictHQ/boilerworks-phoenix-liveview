@@ -64,7 +64,11 @@ defmodule BoilerworksWeb.FormLive.Index do
   end
 
   defp save_form_definition(socket, :edit, params) do
-    case Forms.update_form_definition(socket.assigns.form_definition, params, socket.assigns.current_user) do
+    case Forms.update_form_definition(
+           socket.assigns.form_definition,
+           params,
+           socket.assigns.current_user
+         ) do
       {:ok, _form_def} ->
         {:noreply,
          socket
@@ -96,7 +100,12 @@ defmodule BoilerworksWeb.FormLive.Index do
       if assigns.live_action in [:new, :edit] do
         form_def = assigns.form_definition || %FormDefinition{}
         changeset = Forms.change_form_definition(form_def)
-        schema_json = if form_def.schema, do: Jason.encode!(form_def.schema, pretty: true), else: "{\n  \"fields\": []\n}"
+
+        schema_json =
+          if form_def.schema,
+            do: Jason.encode!(form_def.schema, pretty: true),
+            else: "{\n  \"fields\": []\n}"
+
         assign(assigns, form: to_form(changeset), schema_json: schema_json)
       else
         assigns
@@ -114,9 +123,9 @@ defmodule BoilerworksWeb.FormLive.Index do
 
     <div class="mt-6">
       <.table id="form-definitions" rows={@form_definitions}>
-        <:col :let={form_def} label="Name"><%= form_def.name %></:col>
-        <:col :let={form_def} label="Slug"><%= form_def.slug %></:col>
-        <:col :let={form_def} label="Active"><%= if form_def.is_active, do: "Yes", else: "No" %></:col>
+        <:col :let={form_def} label="Name">{form_def.name}</:col>
+        <:col :let={form_def} label="Slug">{form_def.slug}</:col>
+        <:col :let={form_def} label="Active">{if form_def.is_active, do: "Yes", else: "No"}</:col>
         <:action :let={form_def}>
           <.link navigate={~p"/forms/#{form_def}"}>View</.link>
         </:action>
@@ -131,9 +140,14 @@ defmodule BoilerworksWeb.FormLive.Index do
       </.table>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="form-definition-modal" show on_cancel={JS.patch(~p"/forms")}>
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="form-definition-modal"
+      show
+      on_cancel={JS.patch(~p"/forms")}
+    >
       <div>
-        <h2 class="text-lg font-semibold leading-8 text-zinc-100"><%= @page_title %></h2>
+        <h2 class="text-lg font-semibold leading-8 text-zinc-100">{@page_title}</h2>
 
         <.simple_form
           for={@form}
@@ -152,7 +166,9 @@ defmodule BoilerworksWeb.FormLive.Index do
               class="mt-2 block w-full rounded-lg border-zinc-600 bg-zinc-700 text-zinc-200 focus:ring-0 sm:text-sm font-mono"
               rows="10"
             ><%= if assigns[:schema_json], do: @schema_json, else: "" %></textarea>
-            <p class="mt-1 text-xs text-zinc-500">JSON with a fields array. Each field has: name, type, label, required</p>
+            <p class="mt-1 text-xs text-zinc-500">
+              JSON with a fields array. Each field has: name, type, label, required
+            </p>
           </div>
 
           <:actions>

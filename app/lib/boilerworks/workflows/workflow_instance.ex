@@ -22,7 +22,14 @@ defmodule Boilerworks.Workflows.WorkflowInstance do
 
   def changeset(instance, attrs) do
     instance
-    |> cast(attrs, [:current_state, :data, :entity_type, :entity_id, :workflow_definition_id, :completed_at])
+    |> cast(attrs, [
+      :current_state,
+      :data,
+      :entity_type,
+      :entity_id,
+      :workflow_definition_id,
+      :completed_at
+    ])
     |> validate_required([:current_state, :workflow_definition_id])
   end
 end

@@ -36,18 +36,30 @@ defmodule Boilerworks.Forms.FormDefinition do
     case get_change(changeset, :slug) do
       nil ->
         case get_change(changeset, :name) do
-          nil -> changeset
+          nil ->
+            changeset
+
           name ->
-            slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9\s-]/, "") |> String.replace(~r/\s+/, "-") |> String.trim("-")
+            slug =
+              name
+              |> String.downcase()
+              |> String.replace(~r/[^a-z0-9\s-]/, "")
+              |> String.replace(~r/\s+/, "-")
+              |> String.trim("-")
+
             put_change(changeset, :slug, slug)
         end
-      _ -> changeset
+
+      _ ->
+        changeset
     end
   end
 
   defp validate_json_schema(changeset) do
     case get_change(changeset, :schema) do
-      nil -> changeset
+      nil ->
+        changeset
+
       schema ->
         if is_map(schema) and Map.has_key?(schema, "fields") do
           changeset

@@ -67,10 +67,12 @@ defmodule Boilerworks.Workflows do
 
   def create_instance(%WorkflowDefinition{} = workflow_def, attrs, user) do
     %WorkflowInstance{}
-    |> WorkflowInstance.changeset(Map.merge(attrs, %{
-      "current_state" => workflow_def.initial_state,
-      "workflow_definition_id" => workflow_def.id
-    }))
+    |> WorkflowInstance.changeset(
+      Map.merge(attrs, %{
+        "current_state" => workflow_def.initial_state,
+        "workflow_definition_id" => workflow_def.id
+      })
+    )
     |> Ecto.Changeset.put_change(:created_by_id, user.id)
     |> Repo.insert()
     |> case do
@@ -99,7 +101,8 @@ defmodule Boilerworks.Workflows do
 
       %{"to" => to_state} ->
         Ecto.Multi.new()
-        |> Ecto.Multi.update(:instance,
+        |> Ecto.Multi.update(
+          :instance,
           WorkflowInstance.changeset(instance, %{"current_state" => to_state})
           |> maybe_mark_completed(to_state, workflow_def)
         )

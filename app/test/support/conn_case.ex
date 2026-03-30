@@ -66,7 +66,10 @@ defmodule BoilerworksWeb.ConnCase do
     # Create admin group with all permissions
     {:ok, group} =
       %Group{}
-      |> Group.changeset(%{name: "Test Admin #{System.unique_integer([:positive])}", slug: "test-admin-#{System.unique_integer([:positive])}"})
+      |> Group.changeset(%{
+        name: "Test Admin #{System.unique_integer([:positive])}",
+        slug: "test-admin-#{System.unique_integer([:positive])}"
+      })
       |> Repo.insert()
 
     permission_slugs = ~w(
@@ -85,8 +88,11 @@ defmodule BoilerworksWeb.ConnCase do
               %Permission{}
               |> Permission.changeset(%{name: slug, slug: slug})
               |> Repo.insert()
+
             p
-          p -> p
+
+          p ->
+            p
         end
 
       Repo.insert!(%GroupPermission{group_id: group.id, permission_id: perm.id},
@@ -109,7 +115,10 @@ defmodule BoilerworksWeb.ConnCase do
 
     {:ok, group} =
       %Group{}
-      |> Group.changeset(%{name: "Limited #{System.unique_integer([:positive])}", slug: "limited-#{System.unique_integer([:positive])}"})
+      |> Group.changeset(%{
+        name: "Limited #{System.unique_integer([:positive])}",
+        slug: "limited-#{System.unique_integer([:positive])}"
+      })
       |> Repo.insert()
 
     for slug <- permission_slugs do
@@ -120,8 +129,11 @@ defmodule BoilerworksWeb.ConnCase do
               %Permission{}
               |> Permission.changeset(%{name: slug, slug: slug})
               |> Repo.insert()
+
             p
-          p -> p
+
+          p ->
+            p
         end
 
       Repo.insert!(%GroupPermission{group_id: group.id, permission_id: perm.id},

@@ -4,7 +4,9 @@ defmodule BoilerworksWeb.AuthLive.Login do
   def mount(_params, _session, socket) do
     email = Phoenix.Flash.get(socket.assigns.flash, :email)
     form = to_form(%{"email" => email}, as: "user")
-    {:ok, assign(socket, form: form, page_title: "Log In"), layout: {BoilerworksWeb.Layouts, :root}}
+
+    {:ok, assign(socket, form: form, page_title: "Log In"),
+     layout: {BoilerworksWeb.Layouts, :root}}
   end
 
   def render(assigns) do
@@ -28,7 +30,10 @@ defmodule BoilerworksWeb.AuthLive.Login do
 
           <p class="mt-6 text-center text-sm text-zinc-400">
             Don't have an account?
-            <.link navigate={~p"/register"} class="text-emerald-400 hover:text-emerald-300 font-semibold">
+            <.link
+              navigate={~p"/register"}
+              class="text-emerald-400 hover:text-emerald-300 font-semibold"
+            >
               Register
             </.link>
           </p>

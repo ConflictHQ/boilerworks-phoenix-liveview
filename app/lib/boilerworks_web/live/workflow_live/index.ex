@@ -25,7 +25,10 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
-    assign(socket, page_title: "Edit Workflow", workflow_definition: Workflows.get_workflow_definition!(id))
+    assign(socket,
+      page_title: "Edit Workflow",
+      workflow_definition: Workflows.get_workflow_definition!(id)
+    )
   end
 
   @impl true
@@ -64,7 +67,11 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
   end
 
   defp save_workflow(socket, :edit, params) do
-    case Workflows.update_workflow_definition(socket.assigns.workflow_definition, params, socket.assigns.current_user) do
+    case Workflows.update_workflow_definition(
+           socket.assigns.workflow_definition,
+           params,
+           socket.assigns.current_user
+         ) do
       {:ok, _wf} ->
         {:noreply,
          socket
@@ -80,15 +87,17 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
     states_json = Map.get(params, "states_json", "")
     transitions_json = Map.get(params, "transitions_json", "")
 
-    states = case Jason.decode(states_json) do
-      {:ok, decoded} when is_map(decoded) -> decoded
-      _ -> nil
-    end
+    states =
+      case Jason.decode(states_json) do
+        {:ok, decoded} when is_map(decoded) -> decoded
+        _ -> nil
+      end
 
-    transitions = case Jason.decode(transitions_json) do
-      {:ok, decoded} when is_list(decoded) -> decoded
-      _ -> nil
-    end
+    transitions =
+      case Jason.decode(transitions_json) do
+        {:ok, decoded} when is_list(decoded) -> decoded
+        _ -> nil
+      end
 
     params
     |> Map.put("states", states)
@@ -107,14 +116,20 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
         states_json =
           if wf.states,
             do: Jason.encode!(wf.states, pretty: true),
-            else: "{\n  \"draft\": {\"label\": \"Draft\"},\n  \"published\": {\"label\": \"Published\", \"terminal\": true}\n}"
+            else:
+              "{\n  \"draft\": {\"label\": \"Draft\"},\n  \"published\": {\"label\": \"Published\", \"terminal\": true}\n}"
 
         transitions_json =
           if wf.transitions,
             do: Jason.encode!(wf.transitions, pretty: true),
-            else: "[\n  {\"name\": \"publish\", \"from\": \"draft\", \"to\": \"published\", \"label\": \"Publish\"}\n]"
+            else:
+              "[\n  {\"name\": \"publish\", \"from\": \"draft\", \"to\": \"published\", \"label\": \"Publish\"}\n]"
 
-        assign(assigns, form: to_form(changeset), states_json: states_json, transitions_json: transitions_json)
+        assign(assigns,
+          form: to_form(changeset),
+          states_json: states_json,
+          transitions_json: transitions_json
+        )
       else
         assigns
       end
@@ -131,10 +146,10 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
 
     <div class="mt-6">
       <.table id="workflow-definitions" rows={@workflow_definitions}>
-        <:col :let={wf} label="Name"><%= wf.name %></:col>
-        <:col :let={wf} label="Slug"><%= wf.slug %></:col>
-        <:col :let={wf} label="Initial State"><%= wf.initial_state %></:col>
-        <:col :let={wf} label="Active"><%= if wf.is_active, do: "Yes", else: "No" %></:col>
+        <:col :let={wf} label="Name">{wf.name}</:col>
+        <:col :let={wf} label="Slug">{wf.slug}</:col>
+        <:col :let={wf} label="Initial State">{wf.initial_state}</:col>
+        <:col :let={wf} label="Active">{if wf.is_active, do: "Yes", else: "No"}</:col>
         <:action :let={wf}>
           <.link navigate={~p"/workflows/#{wf}"}>View</.link>
         </:action>
@@ -149,9 +164,14 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
       </.table>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="workflow-modal" show on_cancel={JS.patch(~p"/workflows")}>
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="workflow-modal"
+      show
+      on_cancel={JS.patch(~p"/workflows")}
+    >
       <div>
-        <h2 class="text-lg font-semibold leading-8 text-zinc-100"><%= @page_title %></h2>
+        <h2 class="text-lg font-semibold leading-8 text-zinc-100">{@page_title}</h2>
 
         <.simple_form
           for={@form}
@@ -174,7 +194,9 @@ defmodule BoilerworksWeb.WorkflowLive.Index do
           </div>
 
           <div>
-            <label class="block text-sm font-semibold leading-6 text-zinc-300">Transitions (JSON)</label>
+            <label class="block text-sm font-semibold leading-6 text-zinc-300">
+              Transitions (JSON)
+            </label>
             <textarea
               name="workflow_definition[transitions_json]"
               class="mt-2 block w-full rounded-lg border-zinc-600 bg-zinc-700 text-zinc-200 focus:ring-0 sm:text-sm font-mono"

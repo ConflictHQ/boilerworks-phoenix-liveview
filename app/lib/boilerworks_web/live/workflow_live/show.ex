@@ -37,7 +37,11 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
   end
 
   @impl true
-  def handle_event("transition", %{"instance_id" => instance_id, "transition" => transition_name}, socket) do
+  def handle_event(
+        "transition",
+        %{"instance_id" => instance_id, "transition" => transition_name},
+        socket
+      ) do
     require_permission!(socket, "workflow.transition")
     instance = Workflows.get_instance!(instance_id)
 
@@ -74,7 +78,7 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
 
     ~H"""
     <.header>
-      <%= @workflow_definition.name %>
+      {@workflow_definition.name}
       <:actions>
         <.button phx-click="create_instance">New Instance</.button>
       </:actions>
@@ -88,11 +92,16 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
             :for={{state_name, config} <- @states}
             class={[
               "px-3 py-1 rounded-full text-sm font-medium",
-              if(Map.get(config, "terminal"), do: "bg-emerald-900 text-emerald-300 border border-emerald-700", else: "bg-zinc-700 text-zinc-300 border border-zinc-600")
+              if(Map.get(config, "terminal"),
+                do: "bg-emerald-900 text-emerald-300 border border-emerald-700",
+                else: "bg-zinc-700 text-zinc-300 border border-zinc-600"
+              )
             ]}
           >
-            <%= state_name %>
-            <span :if={state_name == @workflow_definition.initial_state} class="text-xs text-zinc-500">(initial)</span>
+            {state_name}
+            <span :if={state_name == @workflow_definition.initial_state} class="text-xs text-zinc-500">
+              (initial)
+            </span>
             <span :if={Map.get(config, "terminal")} class="text-xs text-emerald-500">(terminal)</span>
           </span>
         </div>
@@ -102,27 +111,27 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
         <h3 class="text-sm font-medium text-zinc-400 mb-3">Transitions</h3>
         <div class="space-y-2">
           <div :for={t <- @all_transitions} class="flex items-center gap-2 text-sm text-zinc-300">
-            <span class="font-mono text-zinc-400"><%= t["from"] %></span>
+            <span class="font-mono text-zinc-400">{t["from"]}</span>
             <span class="text-zinc-500">&rarr;</span>
-            <span class="font-mono text-zinc-400"><%= t["to"] %></span>
-            <span class="text-emerald-400">(<%= t["label"] || t["name"] %>)</span>
+            <span class="font-mono text-zinc-400">{t["to"]}</span>
+            <span class="text-emerald-400">({t["label"] || t["name"]})</span>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 class="text-sm font-medium text-zinc-400 mb-3">Instances (<%= length(@instances) %>)</h3>
+        <h3 class="text-sm font-medium text-zinc-400 mb-3">Instances ({length(@instances)})</h3>
         <div class="space-y-4">
           <div :for={instance <- @instances} class="rounded-lg border border-zinc-700 bg-zinc-800 p-4">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
                 <span class="px-2 py-1 rounded bg-zinc-700 text-sm font-mono text-zinc-300">
-                  <%= instance.current_state %>
+                  {instance.current_state}
                 </span>
                 <span :if={instance.completed_at} class="text-xs text-emerald-400">completed</span>
               </div>
               <span class="text-xs text-zinc-500">
-                <%= if instance.created_by, do: instance.created_by.email, else: "" %>
+                {if instance.created_by, do: instance.created_by.email, else: ""}
               </span>
             </div>
 
@@ -134,7 +143,7 @@ defmodule BoilerworksWeb.WorkflowLive.Show do
                   phx-value-transition={t["name"]}
                   class="rounded bg-emerald-600 hover:bg-emerald-500 px-3 py-1 text-xs font-semibold text-white"
                 >
-                  <%= t["label"] || t["name"] %>
+                  {t["label"] || t["name"]}
                 </button>
               <% end %>
             </div>

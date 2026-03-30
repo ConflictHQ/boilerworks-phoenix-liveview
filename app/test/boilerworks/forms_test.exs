@@ -91,7 +91,9 @@ defmodule Boilerworks.FormsTest do
 
     test "passes with all required fields" do
       form_def = form_definition_fixture()
-      assert :ok = Forms.validate_submission_data(form_def, %{"name" => "John", "email" => "j@e.com"})
+
+      assert :ok =
+               Forms.validate_submission_data(form_def, %{"name" => "John", "email" => "j@e.com"})
     end
   end
 end

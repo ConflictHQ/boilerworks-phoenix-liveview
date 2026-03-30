@@ -70,7 +70,11 @@ defmodule BoilerworksWeb.CategoryLive.Index do
   end
 
   defp save_category(socket, :edit, category_params) do
-    case Catalog.update_category(socket.assigns.category, category_params, socket.assigns.current_user) do
+    case Catalog.update_category(
+           socket.assigns.category,
+           category_params,
+           socket.assigns.current_user
+         ) do
       {:ok, _category} ->
         {:noreply,
          socket
@@ -116,9 +120,9 @@ defmodule BoilerworksWeb.CategoryLive.Index do
       </form>
 
       <.table id="categories" rows={@categories}>
-        <:col :let={category} label="Name"><%= category.name %></:col>
-        <:col :let={category} label="Slug"><%= category.slug %></:col>
-        <:col :let={category} label="Description"><%= category.description || "-" %></:col>
+        <:col :let={category} label="Name">{category.name}</:col>
+        <:col :let={category} label="Slug">{category.slug}</:col>
+        <:col :let={category} label="Description">{category.description || "-"}</:col>
         <:action :let={category}>
           <.link patch={~p"/categories/#{category}/edit"}>Edit</.link>
         </:action>
@@ -130,9 +134,14 @@ defmodule BoilerworksWeb.CategoryLive.Index do
       </.table>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="category-modal" show on_cancel={JS.patch(~p"/categories")}>
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="category-modal"
+      show
+      on_cancel={JS.patch(~p"/categories")}
+    >
       <div>
-        <h2 class="text-lg font-semibold leading-8 text-zinc-100"><%= @page_title %></h2>
+        <h2 class="text-lg font-semibold leading-8 text-zinc-100">{@page_title}</h2>
 
         <.simple_form
           for={@form}

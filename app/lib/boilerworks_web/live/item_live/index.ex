@@ -87,10 +87,12 @@ defmodule BoilerworksWeb.ItemLive.Index do
       </form>
 
       <.table id="items" rows={@items}>
-        <:col :let={item} label="Name"><%= item.name %></:col>
-        <:col :let={item} label="SKU"><%= item.sku %></:col>
-        <:col :let={item} label="Price">$<%= item.price %></:col>
-        <:col :let={item} label="Category"><%= if item.category, do: item.category.name, else: "-" %></:col>
+        <:col :let={item} label="Name">{item.name}</:col>
+        <:col :let={item} label="SKU">{item.sku}</:col>
+        <:col :let={item} label="Price">${item.price}</:col>
+        <:col :let={item} label="Category">
+          {if item.category, do: item.category.name, else: "-"}
+        </:col>
         <:action :let={item}>
           <.link patch={~p"/items/#{item}/edit"}>Edit</.link>
         </:action>

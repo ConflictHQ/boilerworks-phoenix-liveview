@@ -76,7 +76,8 @@ for perm <- all_permissions do
 end
 
 # Editor gets view + create + edit
-editor_slugs = ~w(item.view item.create item.edit category.view category.create category.edit form.view form.create form.edit form.submit workflow.view)
+editor_slugs =
+  ~w(item.view item.create item.edit category.view category.create category.edit form.view form.create form.edit form.submit workflow.view)
 
 for perm <- Enum.filter(all_permissions, &(&1.slug in editor_slugs)) do
   Repo.insert!(
@@ -129,7 +130,11 @@ categories =
         {"Books", "Physical and digital books"},
         {"Home & Garden", "Home improvement and garden supplies"}
       ] do
-    slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9\s-]/, "") |> String.replace(~r/\s+/, "-")
+    slug =
+      name
+      |> String.downcase()
+      |> String.replace(~r/[^a-z0-9\s-]/, "")
+      |> String.replace(~r/\s+/, "-")
 
     case Repo.get_by(Category, slug: slug) do
       nil ->
@@ -155,12 +160,22 @@ for {name, price, sku} <- [
       {"USB-C Hub", "29.99", "UCH-002"},
       {"Mechanical Mouse", "79.99", "MM-003"}
     ] do
-  slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9\s-]/, "") |> String.replace(~r/\s+/, "-")
+  slug =
+    name
+    |> String.downcase()
+    |> String.replace(~r/[^a-z0-9\s-]/, "")
+    |> String.replace(~r/\s+/, "-")
 
   case Repo.get_by(Item, slug: slug) do
     nil ->
       %Item{}
-      |> Item.changeset(%{name: name, slug: slug, price: price, sku: sku, category_id: electronics.id})
+      |> Item.changeset(%{
+        name: name,
+        slug: slug,
+        price: price,
+        sku: sku,
+        category_id: electronics.id
+      })
       |> Ecto.Changeset.put_change(:created_by_id, admin_user.id)
       |> Ecto.Changeset.put_change(:updated_by_id, admin_user.id)
       |> Repo.insert!()
@@ -182,7 +197,13 @@ case Repo.get_by(FormDefinition, slug: "contact-form") do
         "fields" => [
           %{"name" => "full_name", "type" => "text", "label" => "Full Name", "required" => true},
           %{"name" => "email", "type" => "email", "label" => "Email Address", "required" => true},
-          %{"name" => "subject", "type" => "select", "label" => "Subject", "required" => true, "options" => ["General Inquiry", "Support", "Sales", "Other"]},
+          %{
+            "name" => "subject",
+            "type" => "select",
+            "label" => "Subject",
+            "required" => true,
+            "options" => ["General Inquiry", "Support", "Sales", "Other"]
+          },
           %{"name" => "message", "type" => "textarea", "label" => "Message", "required" => true}
         ]
       }
@@ -211,7 +232,12 @@ case Repo.get_by(WorkflowDefinition, slug: "content-approval") do
         "rejected" => %{"label" => "Rejected"}
       },
       transitions: [
-        %{"name" => "submit_for_review", "from" => "draft", "to" => "in_review", "label" => "Submit for Review"},
+        %{
+          "name" => "submit_for_review",
+          "from" => "draft",
+          "to" => "in_review",
+          "label" => "Submit for Review"
+        },
         %{"name" => "approve", "from" => "in_review", "to" => "approved", "label" => "Approve"},
         %{"name" => "reject", "from" => "in_review", "to" => "rejected", "label" => "Reject"},
         %{"name" => "revise", "from" => "rejected", "to" => "draft", "label" => "Revise"}
