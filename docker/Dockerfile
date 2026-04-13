@@ -1,4 +1,4 @@
-FROM elixir:1.17-alpine AS base
+FROM elixir:1.19-alpine AS base
 
 RUN apk add --no-cache build-base git nodejs npm inotify-tools postgresql-client curl
 
