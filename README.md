@@ -39,11 +39,12 @@ docker compose exec app sh -c "MIX_ENV=test mix test"
 
 ## Ports
 
-| Service | Port |
-|---------|------|
-| Phoenix | 4000 |
-| PostgreSQL | 5445 |
-| Redis | 6388 |
+| Service | Host port |
+|---------|-----------|
+| Phoenix (app) | 8000 (container 4000) |
+| PostgreSQL | 5432 |
+| PostgreSQL (test) | 5433 |
+| Redis | 6379 |
 
 ## Architecture
 

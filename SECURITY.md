@@ -25,9 +25,8 @@ We will acknowledge your report within 48 hours and aim to release a fix within 
 
 When deploying Boilerworks:
 
-- Change all default credentials (database, MinIO, session secret)
-- Use HTTPS in production
-- Set `NODE_ENV=production`
-- Configure `CORS_ORIGINS` to your domain only
-- Use strong Auth0 credentials
-- Review the security hardening in `bootstrap.md`
+- Change all default credentials (Postgres user/password, seeded admin login)
+- Generate a strong `SECRET_KEY_BASE` with `mix phx.gen.secret` — never deploy the dev default
+- Set `DATABASE_URL` to production credentials; do not reuse the compose defaults
+- Set `PHX_HOST` to your domain and serve over HTTPS only
+- Run with `MIX_ENV=prod` and keep `.env` files out of version control

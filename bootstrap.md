@@ -59,7 +59,7 @@ docker compose exec app mix ecto.reset
 
 ## Conventions
 
-See the [stack primer](../primers/phoenix-liveview/PRIMER.md) for full architecture decisions and patterns.
+See the [stack primer](https://github.com/ConflictHQ/boilerworks/blob/main/primers/phoenix-liveview/PRIMER.md) for full architecture decisions and patterns.
 
 ### Key patterns
 
